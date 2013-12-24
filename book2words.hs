@@ -17,7 +17,7 @@ makeWordFile book = do
   writeFile (takeBaseName book ++ ".words") (parseBook content)
 
 parseBook :: String -> String
-parseBook = T.unpack . T.unlines . orderWords . getWords
+parseBook = format . orderWords . getWords
 
 getWords :: String -> [Text]
 getWords = map (T.filter isAlpha) . T.words . T.pack . map toLower
@@ -30,3 +30,6 @@ getFrequency = map (head &&& length) . group . sort
 
 sortWords :: [(Text, Int)] -> [(Text, Int)]
 sortWords = sortBy (flip compare `on` snd)
+
+format :: [Text] -> String
+format = T.unpack . T.unlines . map (flip T.snoc '\t')
