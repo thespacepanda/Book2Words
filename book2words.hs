@@ -5,7 +5,7 @@ import Data.Char (toLower, isAlpha)
 import Data.List (sortBy, group, sort)
 import Data.Function (on)
 import Control.Arrow((&&&))
-import Control.Monad (liftM)
+import Control.Exception (evaluate)
 import qualified Data.Text as T
 
 type Text = T.Text
@@ -39,6 +39,9 @@ format = T.unpack . T.unlines . map (flip T.snoc '\t')
 writeDefinitions :: String -> IO String
 writeDefinitions bookWords = do
   let wordList = lines bookWords
-  wordDefs <- mapM (readProcess "dict -d spa-eng" []) wordList
+  wordDefs <- mapM (\word -> do { xs <- readProcess "dict"
+                                        ["-d", "spa-eng", init word] [];
+                                  evaluate (length xs);
+                                  return xs }) wordList
   let finish = zipWith (++) wordList wordDefs
   return $ unlines finish
