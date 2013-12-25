@@ -1,6 +1,6 @@
 import System.Environment (getArgs)
 import System.FilePath (takeBaseName)
-import System.Process (readProcess)
+import System.Process (readProcessWithExitCode)
 import Data.Char (toLower, isAlpha)
 import Data.List (sortBy, group, sort)
 import Data.Function (on)
@@ -39,9 +39,9 @@ format = T.unpack . T.unlines . map (flip T.snoc '\t')
 writeDefinitions :: String -> IO String
 writeDefinitions bookWords = do
   let wordList = lines bookWords
-  wordDefs <- mapM (\word -> do { xs <- readProcess "dict"
-                                        ["-d", "spa-eng", init word] [];
-                                  evaluate (length xs);
-                                  return xs }) wordList
+  wordDefs <- mapM (\word -> do { (_, xs, _) <- readProcessWithExitCode "dict"
+                                          ["-d", "spa-eng", init word] [];
+                                          evaluate (length xs);
+                                          return xs }) wordList
   let finish = zipWith (++) wordList wordDefs
   return $ unlines finish
