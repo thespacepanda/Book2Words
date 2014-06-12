@@ -3,7 +3,7 @@ Book2Words
 
 Takes a book and splits it into words, ordered by frequency.
 
-Right now it is painfully slow (20 minutes for Harry Potter and the Sorceror's Stone on my machine) and it doesn't recognize conjugations, plurals, or proper nouns (this is because freedict doesn't recognize them, but I am working on a solution). 
+It is slow, but only because it uses freedict, which looks every word up online and I'm sure the server throttles the traffic. If anyone has any other command line dictionaries, let me know!
 
 I have only tested it with Spanish, but it should work with any language that has freedict support; simply change the argumenet "spa-eng" in the writeDefinitions function to the correct dictionary for your language. 
 
